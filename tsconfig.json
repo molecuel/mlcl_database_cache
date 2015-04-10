@@ -1,0 +1,22 @@
+{
+    "version": "1.4.1",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    },
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./index.ts",
+        "./mongoose.d.ts",
+        "./typings/lru-cache/lru-cache.d.ts",
+        "./typings/mongoose/mongoose.d.ts",
+        "./typings/node/node.d.ts"
+    ]
+}

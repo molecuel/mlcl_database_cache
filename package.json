@@ -1,0 +1,41 @@
+{
+  "name": "mlcl_database_cache",
+  "dependencies": {
+    "lru-cache": "^2.5.0"
+  },
+  "version": "0.0.1",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "keywords": [
+    "molecuel",
+    "mongoose",
+    "database",
+    "cache"
+  ],
+  "devDependencies": {
+    "mocha": "*",
+    "should": ">= 0.0.1",
+    "assert": ">=0.0.1",
+    "mongoose": ">=0.0.1",
+    "mocha-jshint": ">=0.0.1"
+  },
+  "scripts": {
+    "test": "mocha -R spec"
+  },
+  "description": "A database caching mechanism for mongoose",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/molecuel/mlcl_database.git"
+  },
+  "author": "Dominic Böttger <Dominic.Boettger@inspirationlabs.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/molecuel/mlcl_database/issues"
+  },
+  "homepage": "https://github.com/molecuel/mlcl_database"
+}
