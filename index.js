@@ -16,12 +16,18 @@ var mlcl_database_cache = (function () {
         return mlcl_database_cache._instance;
     };
     mlcl_database_cache.prototype.install = function (mongoose, options) {
+        this._options = options;
         this.cache = LRU(options);
         this._origFind = mongoose.Query.prototype.find;
         var self = this;
         mongoose.Query.prototype.find = function () {
             return self.find.call(this, 'find', arguments);
         };
+    };
+    mlcl_database_cache.prototype.log = function (logmessage) {
+        if (this._options && this._options.debug) {
+            console.log(logmessage);
+        }
     };
     mlcl_database_cache.prototype.find = function (caller, args) {
         var self = this;
@@ -30,7 +36,7 @@ var mlcl_database_cache = (function () {
             var currentQuery = self;
             var obj = mlcache.cache.get(key), i;
             if (obj) {
-                console.log('cache hit: ', key);
+                mlcache.log('cache hit: ' + key);
                 for (i = 0; i < args.length; i++) {
                     if (typeof args[i] === 'function') {
                         args[i](null, obj);
@@ -41,7 +47,7 @@ var mlcl_database_cache = (function () {
             }
             function cacheSet(err, obj) {
                 if (!err && obj) {
-                    console.log('save to cache: ', key);
+                    mlcache.log('save to cache: ' + key);
                     mlcache.cache.set(key, obj);
                 }
                 this.apply(self, arguments);
@@ -55,7 +61,8 @@ var mlcl_database_cache = (function () {
         };
         if (args[0] && args[0]["_id"]) {
             if (args[0]["_id"]["$in"] && args[0]["_id"]["$in"].length == 1) {
-                monCache(args[0]["_id"]["$in"][0]);
+                var key = this['model'].modelName + '-' + args[0]["_id"]["$in"][0];
+                monCache(key);
             }
             else {
                 return mlcl_database_cache.getInstance()._origFind.apply(self, args);
