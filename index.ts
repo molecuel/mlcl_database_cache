@@ -41,25 +41,34 @@ class mlcl_database_cache {
     }
   }
 
-   private find(caller: any, args: any):void {
-     var self = this;
+  public del(modelname: String, id: String):void {
+    var mlcache = mlcl_database_cache.getInstance();
+    if(modelname && id) {
+      var key = modelname + '-' + id;
+      mlcache.log('Delete '+ key);
+      mlcache.cache.del(key);
+    }
+  }
 
-     var mlcache = mlcl_database_cache.getInstance();
+  private find(caller: any, args: any):void {
+    var self = this;
 
-     var monCache = function(key) {
+    var mlcache = mlcl_database_cache.getInstance();
 
-       var currentQuery = self;
+    var monCache = function(key) {
 
-       var obj = mlcache.cache.get(key),
-         i;
+      var currentQuery = self;
 
-       if (obj) {
-         mlcache.log('cache hit: ' + key);
-         for (i = 0; i < args.length; i++) {
-           if (typeof args[i] === 'function') {
-             args[i](null, obj);
-             break;
-           }
+      var obj = mlcache.cache.get(key),
+        i;
+
+      if (obj) {
+       mlcache.log('cache hit: ' + key);
+        for (i = 0; i < args.length; i++) {
+          if (typeof args[i] === 'function') {
+           args[i](null, obj);
+           break;
+          }
          }
          return self;
        }
@@ -81,7 +90,7 @@ class mlcl_database_cache {
      }
 
      if(args[0] && args[0]["_id"]) {
-       if(args[0]["_id"]["$in"] && args[0]["_id"]["$in"].length == 1) {
+       if(args[0]["_id"]["$in"] && args[0]["_id"]["$in"].length == 1 && args[0]["_id"]["$in"][0]) {
          var key = this['model'].modelName + '-' + args[0]["_id"]["$in"][0];
          monCache(key);
        } else {

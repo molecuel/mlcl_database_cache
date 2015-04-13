@@ -61,5 +61,24 @@ describe('mlcl_database_cache', function() {
         done();
       });
     });
+
+    it('should delete the document from cache', function(done) {
+      moncache.getInstance().del(Cat.modelName, testdoc._id);
+      done();
+    });
+
+    it('should read from mongoose', function(done) {
+      Cat.find({_id: {"$in": [testdoc._id]}}, function(err, doc) {
+        should.not.exist(err);
+        done();
+      });
+    });
+
+    it('should read from mongoose and hit the cache', function(done) {
+      Cat.find({_id: {"$in": [testdoc._id]}}, function(err, doc) {
+        should.not.exist(err);
+        done();
+      });
+    });
   })
 });

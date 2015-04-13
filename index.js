@@ -29,6 +29,14 @@ var mlcl_database_cache = (function () {
             console.log(logmessage);
         }
     };
+    mlcl_database_cache.prototype.del = function (modelname, id) {
+        var mlcache = mlcl_database_cache.getInstance();
+        if (modelname && id) {
+            var key = modelname + '-' + id;
+            mlcache.log('Delete ' + key);
+            mlcache.cache.del(key);
+        }
+    };
     mlcl_database_cache.prototype.find = function (caller, args) {
         var self = this;
         var mlcache = mlcl_database_cache.getInstance();
@@ -60,7 +68,7 @@ var mlcl_database_cache = (function () {
             return mlcl_database_cache.getInstance()._origFind.apply(self, args);
         };
         if (args[0] && args[0]["_id"]) {
-            if (args[0]["_id"]["$in"] && args[0]["_id"]["$in"].length == 1) {
+            if (args[0]["_id"]["$in"] && args[0]["_id"]["$in"].length == 1 && args[0]["_id"]["$in"][0]) {
                 var key = this['model'].modelName + '-' + args[0]["_id"]["$in"][0];
                 monCache(key);
             }
